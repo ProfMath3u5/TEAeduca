@@ -40,7 +40,11 @@
           </ul>
         </section>
 
-        <nav aria-label="Controles de acessibilidade" class="mt-auto pt-6 border-t border-line">
+        <nav aria-label="Controles de acessibilidade" class="mt-auto pt-6 border-t border-line space-y-4">
+          <div class="flex flex-col gap-2">
+            <button id="tab-crianca" class="w-full text-left px-4 py-2 rounded-lg font-bold bg-accent text-[#1E3A28] border-2 border-accent transition-all">Modo Criança</button>
+            <button id="tab-educador" class="w-full text-left px-4 py-2 rounded-lg font-bold hover:bg-line transition-all">Painel do Educador</button>
+          </div>
           <div class="flex gap-2">
             <button id="btn-tema-calmo" aria-label="Ativar Modo Calmo" class="px-4 py-2 rounded-full border-2 border-accent bg-accent text-[#1E3A28] font-bold text-xs uppercase tracking-widest cursor-pointer transition-all active:scale-95">
               Calmo
@@ -52,90 +56,129 @@
         </nav>
       </aside>
 
-      <main class="bg-card p-10 space-y-8 relative">
-        <section id="pictogramas" aria-labelledby="titulo-pictogramas" class="space-y-6">
-          <h2 id="titulo-pictogramas" class="text-2xl font-bold text-main">O que você quer dizer?</h2>
-          <div class="space-y-4">
-            <div class="flex flex-col gap-2">
-              <label for="input-frase" class="text-sm font-medium opacity-60">Escreva uma frase (ex: Eu quero água)</label>
-              <input type="text" id="input-frase" placeholder="Escreva aqui..." class="w-full p-5 text-xl rounded-2xl border-2 border-[#E0E0E0] bg-input focus:outline-none focus:ring-4 focus:ring-accent/50" />
-            </div>
-            <div id="resultado-pictogramas" class="flex flex-wrap gap-8 p-10 min-h-[300px] justify-center border-4 border-dashed border-line rounded-[32px] items-center" aria-live="polite">
-              <p class="text-muted italic self-center">Os símbolos aparecerão aqui...</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Painel de Ações Rápidas -->
-        <section id="acoes-rapidas" aria-labelledby="titulo-acoes" class="space-y-6 border-t border-line pt-8">
-          <h2 id="titulo-acoes" class="text-2xl font-bold text-main">Ações Rápidas (Toque para ouvir)</h2>
-          <div class="grid-acoes">
-            <button class="botao-grande" data-fala="banheiro" aria-label="Eu quero ir ao banheiro">
-              <span>🚽</span>
-              <span>Banheiro</span>
-            </button>
-            <button class="botao-grande" data-fala="água" aria-label="Eu quero beber água">
-              <span>💧</span>
-              <span>Água</span>
-            </button>
-            <button class="botao-grande" data-fala="comer" aria-label="Eu quero comer">
-              <span>🥪</span>
-              <span>Comer</span>
-            </button>
-            <button class="botao-grande" data-fala="ajuda" aria-label="Eu preciso de ajuda">
-              <span>🆘</span>
-              <span>Ajuda</span>
-            </button>
-          </div>
-        </section>
-
-        <!-- Mini-Jogo: Pareamento do Piauí -->
-        <section id="jogo-pareamento" aria-labelledby="titulo-jogo" class="space-y-6 border-t border-line pt-8">
-          <div class="flex justify-between items-center">
-            <h2 id="titulo-jogo" class="text-2xl font-bold text-main">Jogo: Tesouros do Piauí</h2>
-            <button id="btn-reset-jogo" class="px-4 py-2 bg-accent/20 hover:bg-accent/40 rounded-lg text-sm font-bold transition-colors">Reiniciar</button>
-          </div>
-          <p class="text-muted italic">Arraste cada item para o seu lugar certo!</p>
-          
-          <div class="game-container">
-            <!-- Itens para arrastar -->
-            <div id="game-items" class="flex gap-6 justify-center p-4">
-              <div class="draggable-item" draggable="true" data-target="cesta" id="item-caju">
-                <span class="text-5xl">🍎</span>
-                <span class="text-xs font-bold">Caju</span>
+      <main class="bg-card p-10 space-y-8 relative overflow-y-auto max-h-[90vh]">
+        <!-- Conteúdo Modo Criança -->
+        <div id="view-crianca" class="space-y-12">
+          <section id="pictogramas" aria-labelledby="titulo-pictogramas" class="space-y-6">
+            <h2 id="titulo-pictogramas" class="text-2xl font-bold text-main">O que você quer dizer?</h2>
+            <div class="space-y-4">
+              <div class="flex flex-col gap-2">
+                <label for="input-frase" class="text-sm font-medium opacity-60">Escreva uma frase (ex: Eu quero água)</label>
+                <input type="text" id="input-frase" placeholder="Escreva aqui..." class="w-full p-5 text-xl rounded-2xl border-2 border-[#E0E0E0] bg-input focus:outline-none focus:ring-4 focus:ring-accent/50" />
               </div>
-              <div class="draggable-item" draggable="true" data-target="rio" id="item-peixe">
-                <span class="text-5xl">🐟</span>
-                <span class="text-xs font-bold">Peixe</span>
-              </div>
-              <div class="draggable-item" draggable="true" data-target="galinheiro" id="item-galo">
-                <span class="text-5xl">🐓</span>
-                <span class="text-xs font-bold">Galo</span>
+              <div id="resultado-pictogramas" class="flex flex-wrap gap-8 p-10 min-h-[300px] justify-center border-4 border-dashed border-line rounded-[32px] items-center" aria-live="polite">
+                <p class="text-muted italic self-center">Os símbolos aparecerão aqui...</p>
               </div>
             </div>
+          </section>
 
-            <!-- Alvos (Sondagens/Casas) -->
-            <div id="game-targets" class="grid grid-cols-3 gap-2 mt-8">
-              <div class="drop-target" data-id="cesta">
-                <div class="target-icon">🧺</div>
-                <p class="font-bold text-[10px] md:text-sm">Cesta</p>
-                <div class="target-slot"></div>
+          <!-- Novos Botões Grandes para Acessibilidade Motora -->
+          <section id="acoes-rapidas" aria-labelledby="titulo-acoes" class="space-y-6 border-t border-line pt-8">
+            <h2 id="titulo-acoes" class="text-2xl font-bold text-main">Ações Rápidas (Toque para ouvir)</h2>
+            <div class="grid-acoes">
+              <button class="botao-grande" data-fala="banheiro" aria-label="Eu quero ir ao banheiro">
+                <span>🚽</span>
+                <span>Banheiro</span>
+              </button>
+              <button class="botao-grande" data-fala="água" aria-label="Eu quero beber água">
+                <span>💧</span>
+                <span>Água</span>
+              </button>
+              <button class="botao-grande" data-fala="comer" aria-label="Eu quero comer">
+                <span>🥪</span>
+                <span>Comer</span>
+              </button>
+              <button class="botao-grande" data-fala="ajuda" aria-label="Eu preciso de ajuda">
+                <span>🆘</span>
+                <span>Ajuda</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Mini-Jogo: Pareamento do Piauí -->
+          <section id="jogo-pareamento" aria-labelledby="titulo-jogo" class="space-y-6 border-t border-line pt-8">
+            <div class="flex justify-between items-center">
+              <h2 id="titulo-jogo" class="text-2xl font-bold text-main">Jogo: Tesouros de Campo Largo do Piauí</h2>
+              <button id="btn-reset-jogo" class="px-4 py-2 bg-accent/20 hover:bg-accent/40 rounded-lg text-sm font-bold transition-colors">Reiniciar</button>
+            </div>
+            <p class="text-muted italic">Arraste cada item para o seu lugar certo!</p>
+            
+            <div class="game-container">
+              <!-- Itens para arrastar -->
+              <div id="game-items" class="flex gap-6 justify-center p-4">
+                <div class="draggable-item" draggable="true" data-target="cesta" id="item-caju">
+                  <span class="text-5xl">🍎</span>
+                  <span class="text-xs font-bold">Caju</span>
+                </div>
+                <div class="draggable-item" draggable="true" data-target="rio" id="item-peixe">
+                  <span class="text-5xl">🐟</span>
+                  <span class="text-xs font-bold">Peixe</span>
+                </div>
+                <div class="draggable-item" draggable="true" data-target="galinheiro" id="item-galo">
+                  <span class="text-5xl">🐓</span>
+                  <span class="text-xs font-bold">Galo</span>
+                </div>
               </div>
-              <div class="drop-target" data-id="rio">
-                <div class="target-icon">🌊</div>
-                <p class="font-bold text-[10px] md:text-sm text-center">Rio Poti</p>
-                <div class="target-slot"></div>
-              </div>
-              <div class="drop-target" data-id="galinheiro">
-                <div class="target-icon">🏠</div>
-                <p class="font-bold text-[10px] md:text-sm">Galinheiro</p>
-                <div class="target-slot"></div>
+
+              <!-- Alvos (Sondagens/Casas) -->
+              <div id="game-targets" class="grid grid-cols-3 gap-2 mt-8">
+                <div class="drop-target" data-id="cesta">
+                  <div class="target-icon">🧺</div>
+                  <p class="font-bold text-[10px] md:text-sm">Cesta</p>
+                  <div class="target-slot"></div>
+                </div>
+                <div class="drop-target" data-id="rio">
+                  <div class="target-icon">🌊</div>
+                  <p class="font-bold text-[10px] md:text-sm text-center">Rio Poti</p>
+                  <div class="target-slot"></div>
+                </div>
+                <div class="drop-target" data-id="galinheiro">
+                  <div class="target-icon">🏠</div>
+                  <p class="font-bold text-[10px] md:text-sm">Galinheiro</p>
+                  <div class="target-slot"></div>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
 
-        <footer class="text-center text-xs opacity-40 pt-8">
+        <!-- Conteúdo Modo Educador (IA) -->
+        <div id="view-educador" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <header class="border-b border-line pb-4">
+            <h2 class="text-3xl font-bold text-main">Adaptador de Conteúdo IA</h2>
+            <p class="text-muted italic">Use nossa IA para adaptar lições escolares para o perfil do aluno.</p>
+          </header>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <section class="space-y-4">
+              <div class="flex flex-col gap-2">
+                <label for="input-perfil-aluno" class="font-bold text-main">Perfil do Aluno (Interesses, dificuldades...)</label>
+                <textarea id="input-perfil-aluno" rows="4" placeholder="Ex: Gosta do Homem-Aranha, tem dificuldade com textos longos, prefere listas..." class="w-full p-4 rounded-xl border-2 border-line bg-input focus:ring-4 focus:ring-accent/50 outline-none"></textarea>
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="input-conteudo-original" class="font-bold text-main">Conteúdo para Adaptar</label>
+                <textarea id="input-conteudo-original" rows="6" placeholder="Cole aqui o texto da aula ou lição de casa..." class="w-full p-4 rounded-xl border-2 border-line bg-input focus:ring-4 focus:ring-accent/50 outline-none"></textarea>
+              </div>
+              <button id="btn-adaptar" class="w-full py-4 bg-accent text-[#1E3A28] font-bold text-lg rounded-xl hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                <span>✨</span> Adaptar Conteúdo com IA
+              </button>
+            </section>
+
+            <section class="bg-item p-6 rounded-2xl border-2 border-dashed border-accent flex flex-col">
+              <h3 class="font-bold text-main mb-4 flex items-center gap-2">
+                <span>📄</span> Resultado Adaptado
+              </h3>
+              <div id="output-adaptado" class="flex-grow prose prose-slate text-main overflow-y-auto max-h-[400px] bg-white/50 p-4 rounded-lg italic">
+                O conteúdo adaptado aparecerá aqui...
+              </div>
+              <button id="btn-copiar-adaptado" class="mt-4 text-xs font-bold uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1">
+                <span>📋</span> Copiar para área de transferência
+              </button>
+            </section>
+          </div>
+        </div>
+
+        <footer class="text-center text-xs opacity-40 pt-8 mt-12 border-t border-line">
           <p>&copy; 2026 Projeto TEAeduca - Campo Largo do Piauí</p>
         </footer>
       </main>

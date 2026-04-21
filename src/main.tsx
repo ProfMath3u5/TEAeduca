@@ -4,10 +4,10 @@
  * Alunos: Desenvolvimento Web - Campo Largo do Piauí
  */
 import './index.css';
+import { GoogleGenAI } from "@google/genai";
 
 // 1. Dicionário de Pictogramas
 // Mapeia palavras-chave para símbolos visuais.
-// Em um app real, isso poderia vir de uma API (como ARASAAC).
 const dicionarioPictogramas: Record<string, string> = {
   "eu": "🙋‍♂️",
   "quero": "👉",
@@ -22,7 +22,11 @@ const dicionarioPictogramas: Record<string, string> = {
   "obrigado": "🙏",
   "casa": "🏠",
   "sono": "😴",
-  "brincar": "🧩"
+  "brincar": "🧩",
+  "maca": "🍎",
+  "caju": "🍎",
+  "peixe": "🐟",
+  "galo": "🐓"
 };
 
 // 2. Seletores de Elementos (DOM)
@@ -31,19 +35,99 @@ const btnContraste = document.getElementById('btn-tema-alto-contraste');
 const inputFrase = document.getElementById('input-frase') as HTMLInputElement;
 const containerResultado = document.getElementById('resultado-pictogramas');
 
+// Tabs e Views
+const tabCrianca = document.getElementById('tab-crianca');
+const tabEducador = document.getElementById('tab-educador');
+const viewCrianca = document.getElementById('view-crianca');
+const viewEducador = document.getElementById('view-educador');
+
+// IA Adaptador
+const inputPerfil = document.getElementById('input-perfil-aluno') as HTMLTextAreaElement;
+const inputConteudo = document.getElementById('input-conteudo-original') as HTMLTextAreaElement;
+const btnAdaptar = document.getElementById('btn-adaptar');
+const outputAdaptado = document.getElementById('output-adaptado');
+const btnCopiar = document.getElementById('btn-copiar-adaptado');
+
+/**
+ * Interface com a Gemini API
+ */
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
+
+async function adaptarConteudoComIA() {
+  if (!btnAdaptar || !outputAdaptado) return;
+
+  const perfil = inputPerfil.value.trim();
+  const conteudo = inputConteudo.value.trim();
+
+  if (!perfil || !conteudo) {
+    alert("Por favor, preencha o perfil do aluno e o conteúdo original.");
+    return;
+  }
+
+  btnAdaptar.innerHTML = '<span>⏳</span> Adaptando...';
+  btnAdaptar.style.opacity = '0.5';
+  btnAdaptar.style.pointerEvents = 'none';
+  outputAdaptado.innerHTML = 'Pensando... 🧠';
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: `Adapte o seguinte conteúdo escolar para um aluno com autismo:
+      
+      PERFIL DO ALUNO: ${perfil}
+      CONTEÚDO ORIGINAL: ${conteudo}
+      
+      DIRETRIZES DE ADAPTAÇÃO:
+      - Use linguagem simples e direta.
+      - Transforme parágrafos longos em listas ou frases curtas.
+      - Foque nos interesses do aluno citados no perfil.
+      - Use reforço visual descrito em texto (ex: [ÍCONE DE LIVRO]).
+      - Crie 3 perguntas simples de múltipla escolha ao final para verificar a compreensão.
+      - Mantenha o tom encorajador.`,
+    });
+
+    // Substitui quebras de linha por <br> e formata melhor
+    const textoFormatado = response.text?.replace(/\n/g, '<br>');
+    outputAdaptado.innerHTML = `<div class="p-2">${textoFormatado}</div>` || "Não foi possível gerar a resposta.";
+  } catch (error) {
+    console.error("Erro na IA:", error);
+    outputAdaptado.innerHTML = "Erro ao conectar com a IA. Verifique sua conexão e tente novamente.";
+  } finally {
+    btnAdaptar.innerHTML = '<span>✨</span> Adaptar Conteúdo com IA';
+    btnAdaptar.style.opacity = '1';
+    btnAdaptar.style.pointerEvents = 'auto';
+  }
+}
+
+/**
+ * Alterna entre abas
+ */
+function alternarAba(aba: 'crianca' | 'educador') {
+  if (!tabCrianca || !tabEducador || !viewCrianca || !viewEducador) return;
+
+  if (aba === 'crianca') {
+    viewCrianca.classList.remove('hidden');
+    viewEducador.classList.add('hidden');
+    tabCrianca.classList.add('bg-accent', 'text-[#1E3A28]', 'border-accent');
+    tabEducador.classList.remove('bg-accent', 'text-[#1E3A28]', 'border-accent');
+  } else {
+    viewCrianca.classList.add('hidden');
+    viewEducador.classList.remove('hidden');
+    tabEducador.classList.add('bg-accent', 'text-[#1E3A28]', 'border-accent');
+    tabCrianca.classList.remove('bg-accent', 'text-[#1E3A28]', 'border-accent');
+  }
+}
+
 /**
  * Função didática: Converte texto em voz (TTS).
  * @param {string} texto - O texto que deve ser falado.
  */
 function falarTexto(texto: string) {
-  // Cancela qualquer fala em andamento para não encavalar
   window.speechSynthesis.cancel();
-  
   const mensagem = new SpeechSynthesisUtterance(texto);
   mensagem.lang = 'pt-BR';
-  mensagem.rate = 1.0; // Velocidade normal
-  mensagem.pitch = 1.2; // Tom levemente mais agudo para ser mais amigável
-  
+  mensagem.rate = 1.0;
+  mensagem.pitch = 1.2;
   window.speechSynthesis.speak(mensagem);
 }
 
@@ -120,6 +204,23 @@ document.addEventListener('click', (e) => {
 });
 btnCalmo?.addEventListener('click', () => trocarTema('calmo'));
 btnContraste?.addEventListener('click', () => trocarTema('contraste'));
+
+// Listeners para Tabs
+tabCrianca?.addEventListener('click', () => alternarAba('crianca'));
+tabEducador?.addEventListener('click', () => alternarAba('educador'));
+
+// Listener para IA
+btnAdaptar?.addEventListener('click', adaptarConteudoComIA);
+
+// Listener para Copiar
+btnCopiar?.addEventListener('click', () => {
+  if (outputAdaptado) {
+    const texto = outputAdaptado.innerText;
+    navigator.clipboard.writeText(texto).then(() => {
+      alert("Conteúdo copiado com sucesso!");
+    });
+  }
+});
 
 // Escuta a digitação no input
 inputFrase?.addEventListener('input', () => {
