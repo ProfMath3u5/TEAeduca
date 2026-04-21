@@ -3,42 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TEAlento - Alfabetização e Rotina</title>
+    <title>TEAeduca - Alfabetização e Rotina</title>
     <meta name="description" content="Auxílio na alfabetização e organização para crianças autistas.">
   </head>
   <body class="theme-calmo">
     <div class="app-grid">
       <aside class="bg-card p-8 flex flex-col gap-6">
-        <header>
+        <header class="flex flex-col gap-2">
           <h1 class="text-2xl font-bold font-display tracking-tight text-main">TEAeduca</h1>
+          <div id="auth-section" class="bg-item p-3 rounded-xl border border-line">
+            <div id="auth-logged-out" class="space-y-2">
+              <p class="text-xs font-bold opacity-60">Área da Família</p>
+              <button id="btn-login-google" class="w-full py-2 bg-white border border-line rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:bg-line transition-all">
+                <span>🌐</span> Entrar com Google
+              </button>
+            </div>
+            <div id="auth-logged-in" class="hidden space-y-2">
+              <p id="user-greeting" class="text-sm font-bold text-main">Olá!</p>
+              <button id="btn-logout" class="text-[10px] uppercase tracking-widest font-bold opacity-40 hover:opacity-100">Sair</button>
+            </div>
+          </div>
         </header>
-
-        <section id="rotina" aria-labelledby="titulo-rotina" class="space-y-4">
-          <h2 id="titulo-rotina" class="text-sm uppercase tracking-widest font-bold opacity-60 text-main">Rotina de Hoje</h2>
-          <ul class="space-y-3 list-none p-0" id="lista-rotina">
-            <li class="routine-item active">
-              <div class="icon-box">🏫</div>
-              <div>
-                <p class="font-bold">Escola</p>
-                <p class="text-sm text-muted">08:00</p>
-              </div>
-            </li>
-            <li class="routine-item">
-              <div class="icon-box">🍎</div>
-              <div>
-                <p class="font-bold">Lanche</p>
-                <p class="text-sm text-muted">10:00</p>
-              </div>
-            </li>
-            <li class="routine-item">
-              <div class="icon-box">🏠</div>
-              <div>
-                <p class="font-bold">Casa</p>
-                <p class="text-sm text-muted">12:30</p>
-              </div>
-            </li>
-          </ul>
-        </section>
 
         <nav aria-label="Controles de acessibilidade" class="mt-auto pt-6 border-t border-line space-y-4">
           <div class="flex flex-col gap-2">
@@ -59,6 +44,54 @@
       <main class="bg-card p-10 space-y-8 relative overflow-y-auto max-h-[90vh]">
         <!-- Conteúdo Modo Criança -->
         <div id="view-crianca" class="space-y-12">
+          <!-- Seção de Cadastro (Aparece se logado mas sem perfil) -->
+          <section id="secao-cadastro" class="hidden space-y-6 bg-accent/10 p-8 rounded-[32px] border-2 border-accent">
+            <h2 class="text-2xl font-bold text-main">Completar Cadastro</h2>
+            <p class="text-muted italic">Precisamos de algumas informações para personalizar a experiência.</p>
+            <form id="form-cadastro" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold opacity-60">Nome da Criança</label>
+                <input type="text" id="reg-nome" required class="p-3 rounded-lg border border-line bg-white" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold opacity-60">Idade</label>
+                <input type="number" id="reg-idade" required class="p-3 rounded-lg border border-line bg-white" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold opacity-60">Série</label>
+                <input type="text" id="reg-serie" required placeholder="Ex: 1º Ano" class="p-3 rounded-lg border border-line bg-white" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold opacity-60">Email do Responsável</label>
+                <input type="email" id="reg-email-resp" required class="p-3 rounded-lg border border-line bg-white" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold opacity-60">PIN de Acesso (4 dígitos)</label>
+                <input type="password" id="reg-pin" required maxlength="4" pattern="\d{4}" placeholder="Ex: 1234" class="p-3 rounded-lg border border-line bg-white font-mono text-center tracking-widest" />
+              </div>
+              <button type="submit" class="md:col-span-2 py-3 bg-accent text-[#1E3A28] font-bold rounded-xl hover:shadow-lg transition-all">Salvar Perfil</button>
+            </form>
+          </section>
+
+          <!-- Seção de Evolução (Dashboard) -->
+          <section id="secao-evolucao" class="hidden space-y-6 border-b border-line pb-8">
+            <h2 class="text-2xl font-bold text-main">Minha Evolução 📈</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-item p-6 rounded-2xl border border-line text-center">
+                 <p class="text-xs font-bold opacity-40 uppercase">Acertos</p>
+                 <p id="stat-acertos" class="text-4xl font-bold text-accent">0</p>
+              </div>
+              <div class="bg-item p-6 rounded-2xl border border-line text-center">
+                 <p class="text-xs font-bold opacity-40 uppercase">Tentativas</p>
+                 <p id="stat-tentativas" class="text-4xl font-bold text-main">0</p>
+              </div>
+              <div class="bg-item p-6 rounded-2xl border border-line text-center">
+                 <p class="text-xs font-bold opacity-40 uppercase">Precisão</p>
+                 <p id="stat-precisao" class="text-4xl font-bold text-accent-vibrant">0%</p>
+              </div>
+            </div>
+          </section>
+
           <section id="pictogramas" aria-labelledby="titulo-pictogramas" class="space-y-6">
             <h2 id="titulo-pictogramas" class="text-2xl font-bold text-main">O que você quer dizer?</h2>
             <div class="space-y-4">

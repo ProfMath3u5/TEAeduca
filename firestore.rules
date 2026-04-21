@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isValidProfile(data) {
+      return data.keys().hasAll(['uid', 'nome', 'idade', 'serie', 'emailResponsavel', 'pin', 'createdAt']) &&
+             data.keys().size() == 7 &&
+             data.uid == request.auth.uid &&
+             data.nome is string && data.nome.size() <= 100 &&
+             data.idade is int && data.idade >= 0 && data.idade <= 25 &&
+             data.serie is string && data.serie.size() <= 20 &&
+             data.emailResponsavel is string && data.emailResponsavel.size() <= 100 &&
+             data.pin is string && data.pin.size() == 4;
+    }
+
+    function isValidEvolution(data) {
+      return data.keys().hasAll(['uid', 'acertos', 'tentativas', 'ultimaAtividade']) &&
+             data.keys().size() == 4 &&
+             data.uid == request.auth.uid &&
+             data.acertos is int &&
+             data.tentativas is int;
+    }
+
+    match /profiles/{uid} {
+      allow get: if isOwner(uid);
+      allow create: if isOwner(uid) && isValidProfile(request.resource.data);
+      allow update: if isOwner(uid) && isValidProfile(request.resource.data) &&
+                      request.resource.data.uid == resource.data.uid &&
+                      request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    match /evolution/{uid} {
+      allow get: if isOwner(uid);
+      allow create: if isOwner(uid) && isValidEvolution(request.resource.data);
+      allow update: if isOwner(uid) && isValidEvolution(request.resource.data) &&
+                      request.resource.data.uid == resource.data.uid;
+    }
+  }
+}

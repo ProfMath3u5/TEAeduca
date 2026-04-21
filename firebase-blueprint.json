@@ -1,0 +1,41 @@
+{
+  "entities": {
+    "profiles": {
+      "title": "Perfil do Aluno",
+      "description": "Dados cadastrais da criança e do responsável.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "nome": { "type": "string" },
+        "idade": { "type": "integer" },
+        "serie": { "type": "string" },
+        "emailResponsavel": { "type": "string" },
+        "pin": { "type": "string", "description": "PIN de 4 dígitos para acesso da criança." },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "nome", "idade", "serie", "emailResponsavel", "pin"]
+    },
+    "evolution": {
+      "title": "Evolução do Aluno",
+      "description": "Dados de acertos e utilização da plataforma.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "acertos": { "type": "integer" },
+        "tentativas": { "type": "integer" },
+        "ultimaAtividade": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid"]
+    }
+  },
+  "firestore": {
+    "/profiles/{uid}": {
+      "schema": "profiles",
+      "description": "Coleção de perfis de usuário."
+    },
+    "/evolution/{uid}": {
+      "schema": "evolution",
+      "description": "Dados de progresso do usuário."
+    }
+  }
+}
