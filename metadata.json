@@ -1,0 +1,6 @@
+{
+  "name": "TEAeduca",
+  "description": "Aplicativo PWA para auxiliar crianças autistas na alfabetização e organização da rotina escolar, com foco em baixa carga cognitiva e acessibilidade (WCAG).",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
