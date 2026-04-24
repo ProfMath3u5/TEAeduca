@@ -27,13 +27,65 @@
   --bg-header: #1A1A1A;
   --bg-card: #000000;
   --bg-item: #1A1A1A;
-  --bg-input: #FFFFFF;
-  --text-main: #FFFFFF;
+  --bg-input: #ffffff;
+  --text-main: #f9f95a;
   --text-muted: rgba(255, 255, 255, 0.7);
-  --accent: #FFFF00; /* Amarelo */
+  --accent:rgb(252, 250, 250); /* Amarelo */
   --accent-vibrant: #00FFFF; /* Ciano */
   --line: #FFFF00;
 }
+
+/* Ajustes específicos de Alto Contraste para instruções em preto conforme solicitado */
+.theme-alto-contraste #auth-section,
+.theme-alto-contraste #secao-cadastro,
+.theme-alto-contraste #secao-cadastro input,
+.theme-alto-contraste label[for="input-perfil-aluno"],
+.theme-alto-contraste label[for="input-conteudo-original"],
+.theme-alto-contraste #input-perfil-aluno,
+.theme-alto-contraste #input-conteudo-original {
+  background-color: var(--accent);
+  color: #000000 !important;
+  border-color: #000000;
+}
+
+.theme-alto-contraste #auth-section p,
+.theme-alto-contraste #secao-cadastro h2,
+.theme-alto-contraste #secao-cadastro p,
+.theme-alto-contraste #secao-cadastro label,
+.theme-alto-contraste #input-perfil-aluno::placeholder,
+.theme-alto-contraste #input-conteudo-original::placeholder,
+.theme-alto-contraste #secao-cadastro input::placeholder {
+  color: #000000 !important;
+  opacity: 0.7;
+}
+
+.theme-alto-contraste #auth-section p,
+.theme-alto-contraste #secao-cadastro h2,
+.theme-alto-contraste #secao-cadastro p,
+.theme-alto-contraste #secao-cadastro label {
+  opacity: 1;
+}
+
+.theme-alto-contraste label[for="input-perfil-aluno"],
+.theme-alto-contraste label[for="input-conteudo-original"] {
+  padding: 4px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.theme-alto-contraste #view-educador h3 {
+  color: #FFFF00 !important;
+}
+
+.theme-alto-contraste #tab-crianca:not(.bg-accent),
+.theme-alto-contraste #tab-educador:not(.bg-accent) {
+  background-color: #4A4A4A !important;
+  color: #FFFFFF !important;
+  border-color: #4A4A4A !important;
+}
+
+
 
 body {
   background-color: var(--bg-app);
