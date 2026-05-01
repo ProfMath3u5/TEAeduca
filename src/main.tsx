@@ -130,7 +130,10 @@ btnLoginGoogle?.addEventListener('click', async () => {
       console.log("Login cancelado pelo usuário.");
     } else {
       console.error("Erro ao fazer login:", err);
-      alert("Houve um problema ao entrar com o Google. Tente novamente.");
+      // Fornece mais detalhes para ajudar no diagnóstico
+      const mensagemErro = err.message || "Erro desconhecido";
+      const codigoErro = err.code || "auth/unknown";
+      alert(`Houve um problema ao entrar com o Google.\n\nDetalhe: ${mensagemErro} (${codigoErro})\n\nVerifique se o domínio está autorizado no Console do Firebase.`);
     }
   }
 });
